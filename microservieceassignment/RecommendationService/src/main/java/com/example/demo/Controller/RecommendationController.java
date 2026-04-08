@@ -1,0 +1,46 @@
+package com.example.demo.Controller;
+
+
+
+import java.util.Arrays;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.Recommendation.Recommendation;
+
+
+@RestController
+public class RecommendationController {
+
+    @GetMapping("/recommendations/{productId}")
+    public Recommendation getRecommendations(@PathVariable int productId) {
+
+        Recommendation rec = new Recommendation();
+        rec.setProductId(productId);
+
+        // Recommend based on productId
+        if (productId == 1) {
+            // Laptop recommendations
+            rec.setCategory("Electronics");
+            rec.setRecommendedProducts(Arrays.asList(
+                "Mouse", "Keyboard", "Monitor", "Laptop Bag"
+            ));
+        } else if (productId == 2) {
+            // Phone recommendations
+            rec.setCategory("Electronics");
+            rec.setRecommendedProducts(Arrays.asList(
+                "Phone Case", "Charger", "Earphones", "Screen Guard"
+            ));
+        } else {
+            // Default recommendations
+            rec.setCategory("General");
+            rec.setRecommendedProducts(Arrays.asList(
+                "Pen Drive", "Mouse Pad", "USB Hub"
+            ));
+        }
+
+        return rec;
+    }
+}

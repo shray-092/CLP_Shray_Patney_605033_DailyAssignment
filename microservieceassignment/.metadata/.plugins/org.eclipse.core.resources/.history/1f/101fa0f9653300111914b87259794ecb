@@ -1,0 +1,34 @@
+spring.application.name=APIGateway
+server.port=8088
+
+# Eureka
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+
+# Discovery locator — auto routes for all registered services
+spring.cloud.gateway.discovery.locator.enabled=true
+spring.cloud.gateway.discovery.locator.lower-case-service-id=true
+
+# Route 1 — Cart
+spring.cloud.gateway.routes[0].id=cart-route
+spring.cloud.gateway.routes[0].uri=lb://CARTSERVICE
+spring.cloud.gateway.routes[0].predicates[0]=Path=/cart/**
+
+# Route 2 — Catalogue
+spring.cloud.gateway.routes[1].id=catalogue-route
+spring.cloud.gateway.routes[1].uri=lb://CATALOGUESERVICE
+spring.cloud.gateway.routes[1].predicates[0]=Path=/products/**
+
+# Route 3 — Price
+spring.cloud.gateway.routes[2].id=price-route
+spring.cloud.gateway.routes[2].uri=lb://PRICESERVICE
+spring.cloud.gateway.routes[2].predicates[0]=Path=/price/**
+
+# Route 4 — Stock
+spring.cloud.gateway.routes[3].id=stock-route
+spring.cloud.gateway.routes[3].uri=lb://STOCKSERVICE
+spring.cloud.gateway.routes[3].predicates[0]=Path=/stock/**
+
+# Route 5 — Recommendation
+spring.cloud.gateway.routes[4].id=recommendation-route
+spring.cloud.gateway.routes[4].uri=lb://RECOMMENDATIONSERVICE
+spring.cloud.gateway.routes[4].predicates[0]=Path=/recommendations/**

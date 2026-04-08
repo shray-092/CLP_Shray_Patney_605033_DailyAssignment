@@ -1,6 +1,5 @@
 package com.example.demo.Controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,9 +9,8 @@ import org.springframework.web.client.RestTemplate;
 import com.example.demo.CartProduct.CartProduct;
 import com.example.demo.CartProduct.Price;
 import com.example.demo.CartProduct.Product;
+import com.example.demo.CartProduct.Recommendation;
 import com.example.demo.CartProduct.Stock;
-
-
 
 @RestController
 public class CartController {
@@ -23,25 +21,27 @@ public class CartController {
     @GetMapping("/cart/{id}")
     public CartProduct getCartProduct(@PathVariable int id) {
 
-        // Step 1 — Call CatalogueService
+      
         Product product = restTemplate.getForObject(
-            "http://localhost:8081/products/" + id,
+            "http://CATALOGUESERVICE/products/" + id,
             Product.class
         );
 
-        // Step 2 — Call PriceService
         Price price = restTemplate.getForObject(
-            "http://localhost:8082/price/" + id,
+            "http://PRICESERVICE/price/" + id,
             Price.class
         );
 
-        // Step 3 — Call StockService
         Stock stock = restTemplate.getForObject(
-            "http://localhost:8083/stock/" + id,
+            "http://STOCKSERVICE/stock/" + id,
             Stock.class
         );
 
-        // Step 4 — Combine all into CartProduct
+        Recommendation rec = restTemplate.getForObject(
+            "http://RECOMMENDATIONSERVICE/recommendations/" + id,
+            Recommendation.class
+        );
+
         CartProduct cp = new CartProduct();
         cp.setId(id);
         cp.setName(product.getName());
@@ -51,6 +51,7 @@ public class CartController {
         cp.setCurrency(price.getCurrency());
         cp.setQuantity(stock.getQuantity());
         cp.setInStock(stock.isInStock());
+        cp.setRecommendedProducts(rec.getRecommendedProducts());
 
         return cp;
     }
